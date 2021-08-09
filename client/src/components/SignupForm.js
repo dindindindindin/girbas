@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,6 +24,80 @@ const useStyles = makeStyles((theme) => ({
 
 const SignupForm = (props) => {
   const classes = useStyles();
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = useCallback(
+    ({ target: { name, value } }) =>
+      setInput((state) => ({ ...state, [name]: value })),
+    []
+  );
+  console.log(input);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validate()) {
+      console.log(input);
+
+      let emptyInput = {};
+      emptyInput["email"] = "";
+      emptyInput["password"] = "";
+      emptyInput["confirmPassword"] = "";
+      setInput(emptyInput);
+
+      console.log("basarili");
+    }
+  };
+
+  const validate = () => {
+    let currentInput = input;
+    let currentErrors = {};
+    let isValid = true;
+
+    if (!currentInput["email"]) {
+      isValid = false;
+      currentErrors["email"] = "Lütfen e-posta adresinizi giriniz.";
+    }
+
+    if (typeof currentInput["email"] !== "undefined") {
+      var pattern = new RegExp(
+        /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+      );
+      if (!pattern.test(currentInput["email"])) {
+        isValid = false;
+        currentErrors["email"] = "Lütfen geçerli bir e-posta giriniz.";
+      }
+    }
+
+    if (!currentInput["password"]) {
+      isValid = false;
+      currentErrors["password"] = "Lütfen şifre giriniz.";
+    }
+
+    if (!currentInput["confirmPassword"]) {
+      isValid = false;
+      currentErrors["confirmPassword"] = "Lütfen tekrar şifre giriniz.";
+    }
+
+    if (
+      typeof currentInput["password"] !== "undefined" &&
+      typeof currentInput["confirmPassword"] !== "undefined"
+    ) {
+      if (currentInput["password"] !== currentInput["confirmPassword"]) {
+        isValid = false;
+        currentErrors["password"] = "Şifreler aynı değil.";
+      }
+    }
+
+    setErrors(currentErrors);
+
+    return isValid;
+  };
 
   return (
     <div className={classes.paper}>
@@ -32,12 +107,14 @@ const SignupForm = (props) => {
           margin="normal"
           required
           fullWidth
-          id="email"
           label="E-posta Adresiniz"
           name="email"
           autoComplete="email"
           autoFocus
+          onChange={handleChange}
+          value={input.email}
         />
+        <Typography color="error">{errors.email}</Typography>
         <TextField
           variant="outlined"
           margin="normal"
@@ -46,26 +123,31 @@ const SignupForm = (props) => {
           name="password"
           label="Şifreniz"
           type="password"
-          id="password"
           autoComplete="current-password"
+          onChange={handleChange}
+          value={input.password}
         />
+        <Typography color="error">{errors.password}</Typography>
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          name="password"
+          name="confirmPassword"
           label="Tekrar Şifreniz"
           type="password"
-          id="password"
           autoComplete="current-password"
+          onChange={handleChange}
+          value={input.confirmPassword}
         />
+        <Typography color="error">{errors.confirmPassword}</Typography>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={handleSubmit}
         >
           ÜYE OL
         </Button>

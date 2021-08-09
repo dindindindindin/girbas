@@ -30,9 +30,7 @@ const LoginForm = (props) => {
         <TextField
           variant="outlined"
           margin="normal"
-          required
           fullWidth
-          id="email"
           label="E-posta Adresiniz"
           name="email"
           autoComplete="email"
@@ -41,12 +39,10 @@ const LoginForm = (props) => {
         <TextField
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           name="password"
           label="Şifreniz"
           type="password"
-          id="password"
           autoComplete="current-password"
         />
         <Button
@@ -56,7 +52,7 @@ const LoginForm = (props) => {
           color="primary"
           className={classes.submit}
         >
-          Giriş Yap
+          GİRİŞ YAP
         </Button>
         <Grid container>
           <Grid item xs>
