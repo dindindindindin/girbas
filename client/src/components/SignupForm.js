@@ -5,6 +5,7 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import { auth } from "../firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,18 +38,40 @@ const SignupForm = (props) => {
     []
   );
   console.log(input);
+  console.log(auth.currentUser);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
       console.log(input);
 
-      let emptyInput = {};
-      emptyInput["email"] = "";
-      emptyInput["password"] = "";
-      emptyInput["confirmPassword"] = "";
-      setInput(emptyInput);
+      try {
+        const result = await auth.createUserWithEmailAndPassword(
+          input.email,
+          input.password
+        );
+        console.log("result: ", result);
+      } catch (error) {
+        const errorCode = error.code;
+        if (errorCode === "auth/email-already-in-use") {
+          setErrors({ email: "Bu e-posta zaten kayıtlı." });
+        } else if (errorCode === "auth/invalid-email") {
+          setErrors({ email: "Lütfen geçerli bir e-posta giriniz." });
+        } else if (errorCode === "auth/weak-password") {
+          setErrors({ password: "Şifreniz çok zayıf." });
+        }
+        console.log(error);
+      }
+
+      if (auth.currentUser != null) {
+        let emptyInput = {};
+        emptyInput["email"] = "";
+        emptyInput["password"] = "";
+        emptyInput["confirmPassword"] = "";
+        setInput(emptyInput);
+        console.log("bosaltildi");
+      }
 
       console.log("basarili");
     }
