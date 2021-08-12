@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useHistory } from "react-router";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -32,6 +33,8 @@ const SignupForm = (props) => {
   });
   const [errors, setErrors] = useState({});
 
+  const history = useHistory();
+
   const handleChange = useCallback(
     ({ target: { name, value } }) =>
       setInput((state) => ({ ...state, [name]: value })),
@@ -52,6 +55,7 @@ const SignupForm = (props) => {
           input.password
         );
         console.log("result: ", result);
+        history.push("/");
       } catch (error) {
         const errorCode = error.code;
         if (errorCode === "auth/email-already-in-use") {
@@ -72,8 +76,6 @@ const SignupForm = (props) => {
         setInput(emptyInput);
         console.log("bosaltildi");
       }
-
-      console.log("basarili");
     }
   };
 

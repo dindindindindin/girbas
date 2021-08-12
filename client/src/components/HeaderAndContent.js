@@ -19,6 +19,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import RightHeader from "./RightHeader";
 import LoginSignup from "../pages/LoginSignup";
 import Homepage from "../pages/Homepage";
+import ForgotPassword from "../pages/ForgotPassword";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   logo: { flexGrow: 1 },
-  link: { color: "inherit" },
+  link: { color: "inherit", "&:hover": { color: "inherit" } },
 }));
 
 function HeaderAndContent(props) {
@@ -167,6 +168,7 @@ function HeaderAndContent(props) {
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route exact path="/uyelik" component={LoginSignup} />
+          <Route exact path="/sifremi-unuttum" component={ForgotPassword} />
         </Switch>
       </main>
     </div>

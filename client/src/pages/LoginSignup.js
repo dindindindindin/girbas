@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSelector } from "react-redux";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
@@ -28,9 +29,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginSignup = () => {
+const LoginSignup = ({ history }) => {
   const classes = useStyles();
-  const [currentTab, setCurrentTab] = React.useState(0);
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [user, history]);
 
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);

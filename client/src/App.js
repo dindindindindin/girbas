@@ -7,7 +7,8 @@ import { useDispatch } from "react-redux";
 import { loggedInUser } from "./reducers/userSlice";
 
 const App = () => {
-  const dispatch = useDispatch();
+  let dispatch = useDispatch();
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -20,7 +21,7 @@ const App = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  });
 
   return <HeaderAndContent />;
 };

@@ -6,13 +6,16 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Link from "@material-ui/core/Link";
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
+import { logout } from "../reducers/userSlice";
 import { auth } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(() => ({
   link: {
     color: "inherit",
+    "&:hover": { color: "inherit" },
   },
 }));
 
@@ -22,13 +25,23 @@ const RightHeader = () => {
   const isMenuOpen = Boolean(anchorEl);
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const history = useHistory();
 
   const handleMenuClose = () => setAnchorEl(null);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleLogout = () => {
+    auth.signOut();
+    dispatch(logout());
+    handleMenuClose();
+    history.push("/");
+  };
 
-  console.log("current user: ", auth.currentUser);
+  console.log("current user: ", user);
+  console.log("current firebase user: ", auth.currentUser);
 
   const profileLoggedOut = (
     <Link component={RouterLink} to="/uyelik" className={classes.link}>
@@ -59,7 +72,7 @@ const RightHeader = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Hesabım</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Çıkış yap</MenuItem>
+      <MenuItem onClick={handleLogout}>Çıkış yap</MenuItem>
     </Menu>
   );
 
@@ -71,7 +84,7 @@ const RightHeader = () => {
       <IconButton aria-label="Sepetim" color="inherit">
         <ShoppingCartIcon />
       </IconButton>
-      {auth.currentUser == null ? profileLoggedOut : profileLoggedIn}
+      {user == null ? profileLoggedOut : profileLoggedIn}
       {renderMenu}
     </div>
   );
