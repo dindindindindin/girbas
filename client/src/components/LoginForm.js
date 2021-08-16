@@ -38,7 +38,6 @@ const LoginForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
 
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
