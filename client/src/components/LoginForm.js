@@ -10,6 +10,17 @@ import { useDispatch } from "react-redux";
 import { loggedInUser } from "../reducers/userSlice";
 import { useHistory } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
+
+const createOrUpdateUser = async (authtoken) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/create-or-update-user`,
+    {},
+    {
+      headers: { authtoken: authtoken },
+    }
+  );
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,11 +56,16 @@ const LoginForm = (props) => {
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
 
-      dispatch(loggedInUser({ email: user.email, token: idTokenResult.token }));
+      createOrUpdateUser(idTokenResult.token).then((res) =>
+        console.log("create or update user res: ", res)
+      );
+
+      //  dispatch(loggedInUser({ email: user.email, token: idTokenResult.token }));
 
       setEmail("");
       setPassword("");
-      history.push("/");
+      setErrors({});
+      // history.push("/");
     } catch (error) {
       const errorCode = error.code;
       if (errorCode === "auth/invalid-email") {
@@ -58,6 +74,8 @@ const LoginForm = (props) => {
         setErrors({ password: "Girilen hesap geçersiz." });
       } else if (errorCode === "auth/wrong-password") {
         setErrors({ password: "Girilen şifre hatalı." });
+      } else {
+        setErrors({ password: error.message });
       }
     }
   };
