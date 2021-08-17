@@ -7,7 +7,7 @@ exports.authCheck = async (req, res, cbFn) => {
       .verifyIdToken(req.headers.authtoken);
 
     req.user = firebaseUser;
-    //  console.log("firebase user in authcheck: ", firebaseUser);
+    // console.log("firebase user in authcheck: ", firebaseUser);
 
     cbFn();
   } catch (err) {

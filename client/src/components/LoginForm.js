@@ -4,23 +4,14 @@ import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { loggedInUser } from "../reducers/userSlice";
 import { useHistory } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-
-const createOrUpdateUser = async (authtoken) => {
-  return await axios.post(
-    `${process.env.REACT_APP_API}/create-or-update-user`,
-    {},
-    {
-      headers: { authtoken: authtoken },
-    }
-  );
-};
+import { createOrGetUser } from "../functions/auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,6 +34,7 @@ const LoginForm = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   let dispatch = useDispatch();
   const history = useHistory();
@@ -50,24 +42,34 @@ const LoginForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
 
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
 
-      createOrUpdateUser(idTokenResult.token).then((res) =>
-        console.log("create or update user res: ", res)
-      );
+      const dbRes = await createOrGetUser(idTokenResult.token);
+      console.log("create or get user res: ", dbRes);
 
-      //  dispatch(loggedInUser({ email: user.email, token: idTokenResult.token }));
+      dispatch(
+        loggedInUser({
+          id: dbRes.data.id,
+          email: dbRes.data.email,
+          role: dbRes.data.role,
+          token: idTokenResult.token,
+        })
+      );
 
       setEmail("");
       setPassword("");
       setErrors({});
-      // history.push("/");
+      setLoading(false);
+      history.push("/");
     } catch (error) {
       const errorCode = error.code;
+      setLoading(false);
       if (errorCode === "auth/invalid-email") {
         setErrors({ email: "Lütfen geçerli bir e-posta giriniz." });
       } else if (errorCode === "auth/user-not-found") {
@@ -107,6 +109,7 @@ const LoginForm = (props) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Typography color="error">{errors.password}</Typography>
+        {loading && <LinearProgress />}
         <Button
           type="submit"
           fullWidth

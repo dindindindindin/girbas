@@ -35,9 +35,9 @@ const LoginSignup = ({ history }) => {
 
   const user = useSelector((state) => state.user);
 
-  //  useEffect(() => {
-  //    if (user && user.token) history.push("/");
-  //  }, [user, history]);
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [user, history]);
 
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);

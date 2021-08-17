@@ -4,9 +4,13 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { loggedInUser } from "../reducers/userSlice";
+import { createOrGetUser } from "../functions/auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,7 +36,9 @@ const SignupForm = (props) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
+  let dispatch = useDispatch();
   const history = useHistory();
 
   const handleChange = useCallback(
@@ -46,6 +52,8 @@ const SignupForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     if (validate()) {
       console.log(input);
 
@@ -54,27 +62,42 @@ const SignupForm = (props) => {
           input.email,
           input.password
         );
-        console.log("result: ", result);
+
+        const { user } = result;
+        const idTokenResult = await user.getIdTokenResult();
+
+        const dbRes = await createOrGetUser(idTokenResult.token);
+        console.log("create or get user res: ", dbRes);
+
+        dispatch(
+          loggedInUser({
+            id: dbRes.data.id,
+            email: dbRes.data.email,
+            role: dbRes.data.role,
+            token: idTokenResult.token,
+          })
+        );
+
+        let emptyInput = {};
+        emptyInput["email"] = "";
+        emptyInput["password"] = "";
+        emptyInput["confirmPassword"] = "";
+        setInput(emptyInput);
+        setLoading(false);
         history.push("/");
       } catch (error) {
         const errorCode = error.code;
+        setLoading(false);
         if (errorCode === "auth/email-already-in-use") {
           setErrors({ email: "Bu e-posta zaten kayıtlı." });
         } else if (errorCode === "auth/invalid-email") {
           setErrors({ email: "Lütfen geçerli bir e-posta giriniz." });
         } else if (errorCode === "auth/weak-password") {
           setErrors({ password: "Şifreniz çok zayıf." });
+        } else {
+          setErrors({ confirmPassword: error.message });
         }
         console.log(error);
-      }
-
-      if (auth.currentUser != null) {
-        let emptyInput = {};
-        emptyInput["email"] = "";
-        emptyInput["password"] = "";
-        emptyInput["confirmPassword"] = "";
-        setInput(emptyInput);
-        console.log("bosaltildi");
       }
     }
   };
@@ -166,6 +189,7 @@ const SignupForm = (props) => {
           value={input.confirmPassword}
         />
         <Typography color="error">{errors.confirmPassword}</Typography>
+        {loading && <LinearProgress />}
         <Button
           type="submit"
           fullWidth
