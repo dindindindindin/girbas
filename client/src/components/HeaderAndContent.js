@@ -20,6 +20,7 @@ import RightHeader from "./RightHeader";
 import LoginSignup from "../pages/LoginSignup";
 import Homepage from "../pages/Homepage";
 import ForgotPassword from "../pages/ForgotPassword";
+import UserSettings from "../pages/user/UserSettings";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -169,6 +170,7 @@ function HeaderAndContent(props) {
           <Route exact path="/" component={Homepage} />
           <Route exact path="/uyelik" component={LoginSignup} />
           <Route exact path="/sifremi-unuttum" component={ForgotPassword} />
+          <Route exact path="/hesabim" component={UserSettings} />
         </Switch>
       </main>
     </div>
