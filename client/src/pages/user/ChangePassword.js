@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   password: {
     marginTop: "0",
   },
-  nav: { marginBottom: theme.spacing(2) },
 }));
 
 const ChangePassword = () => {
@@ -69,29 +68,32 @@ const ChangePassword = () => {
     let isValid = true;
 
     if (!password) {
+      setLoading(false);
       isValid = false;
       currentErrors["password"] = "Lütfen şifre giriniz.";
     }
 
     if (!confirmPassword) {
+      setLoading(false);
       isValid = false;
       currentErrors["confirmPassword"] = "Lütfen tekrar şifre giriniz.";
     }
 
     if (password !== "" && confirmPassword !== "") {
       if (password !== confirmPassword) {
+        setLoading(false);
         isValid = false;
         currentErrors["password"] = "Şifreler aynı değil.";
       }
     }
     setErrors(currentErrors);
-    setLoading(false);
+
     return isValid;
   };
 
   return (
     <div className={classes.root}>
-      <UserNav className={classes.nav} />
+      <UserNav />
       <Paper className={classes.paper}>
         <form className={classes.form} noValidate>
           <TextField

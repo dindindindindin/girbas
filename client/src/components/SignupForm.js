@@ -105,6 +105,7 @@ const SignupForm = (props) => {
     let isValid = true;
 
     if (!currentInput["email"]) {
+      setLoading(false);
       isValid = false;
       currentErrors["email"] = "Lütfen e-posta adresinizi giriniz.";
     }
@@ -114,17 +115,20 @@ const SignupForm = (props) => {
         /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
       );
       if (!pattern.test(currentInput["email"])) {
+        setLoading(false);
         isValid = false;
         currentErrors["email"] = "Lütfen geçerli bir e-posta giriniz.";
       }
     }
 
     if (!currentInput["password"]) {
+      setLoading(false);
       isValid = false;
       currentErrors["password"] = "Lütfen şifre giriniz.";
     }
 
     if (!currentInput["confirmPassword"]) {
+      setLoading(false);
       isValid = false;
       currentErrors["confirmPassword"] = "Lütfen tekrar şifre giriniz.";
     }
@@ -134,13 +138,14 @@ const SignupForm = (props) => {
       currentInput["confirmPassword"] !== ""
     ) {
       if (currentInput["password"] !== currentInput["confirmPassword"]) {
+        setLoading(false);
         isValid = false;
         currentErrors["password"] = "Şifreler aynı değil.";
       }
     }
 
     setErrors(currentErrors);
-    setLoading(false);
+
     return isValid;
   };
 

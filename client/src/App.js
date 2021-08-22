@@ -11,23 +11,27 @@ const App = () => {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const idTokenResult = await user.getIdTokenResult();
+    try {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          const idTokenResult = await user.getIdTokenResult();
 
-        const dbRes = await createOrGetUser(idTokenResult.token);
-        console.log("create or get user res: ", dbRes);
+          const dbRes = await createOrGetUser(idTokenResult.token);
+          console.log("create or get user res: ", dbRes);
 
-        dispatch(
-          loggedInUser({
-            id: dbRes.data.id,
-            email: dbRes.data.email,
-            role: dbRes.data.role,
-            token: idTokenResult.token,
-          })
-        );
-      }
-    });
+          dispatch(
+            loggedInUser({
+              id: dbRes.data.id,
+              email: dbRes.data.email,
+              role: dbRes.data.role,
+              token: idTokenResult.token,
+            })
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 
   return <HeaderAndContent />;

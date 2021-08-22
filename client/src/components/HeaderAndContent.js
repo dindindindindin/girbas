@@ -22,7 +22,9 @@ import Homepage from "../pages/Homepage";
 import ForgotPassword from "../pages/ForgotPassword";
 import UserSettings from "../pages/user/UserSettings";
 import ChangePassword from "../pages/user/ChangePassword";
+import AdminDashboard from "../pages/admin/AdminDashboard";
 import UserRoute from "./UserRoute";
+import AdminRoute from "./AdminRoute";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -177,6 +179,7 @@ function HeaderAndContent(props) {
             component={ChangePassword}
           />
           <UserRoute exact path="/hesabim" component={UserSettings} />
+          <AdminRoute exact path="/admin" component={AdminDashboard} />
           <Route exact path="/" component={Homepage} />
         </Switch>
       </main>

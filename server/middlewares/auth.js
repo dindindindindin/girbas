@@ -1,4 +1,6 @@
 const admin = require("../firebase");
+const db = require("../models");
+const User = db.users;
 
 exports.authCheck = async (req, res, cbFn) => {
   try {
@@ -12,5 +14,16 @@ exports.authCheck = async (req, res, cbFn) => {
     cbFn();
   } catch (err) {
     res.status(401).json({ err: "invalid or expired token" });
+  }
+};
+
+exports.adminCheck = async (req, res, cbFn) => {
+  const { email } = req.user;
+  const adminUser = await User.findAll({ where: { email: email } });
+  console.log("adminuser role: ", adminUser[0].role);
+  if (adminUser[0].role !== "admin") {
+    res.status(403).json({ error: "Admin paneli. Girişiniz yasak." });
+  } else {
+    cbFn();
   }
 };

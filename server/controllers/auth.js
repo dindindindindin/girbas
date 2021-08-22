@@ -3,7 +3,6 @@ const User = db.users;
 
 exports.createOrGetUser = async (req, res) => {
   const user = await User.findAll({ where: { email: req.user.email } });
-  console.log("user ", user[0]);
 
   if (user.length === 0) {
     const createdUser = await User.create({ email: req.user.email });
