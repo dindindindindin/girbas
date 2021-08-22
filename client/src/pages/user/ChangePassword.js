@@ -132,7 +132,6 @@ const ChangePassword = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
             onClick={handleSubmit}
           >
             ŞİFREMİ DEĞİŞTİR

@@ -10,10 +10,10 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "2mb" }));
 app.use(cors());
 
-//const db = require("./models");
-//db.sequelize.sync({ force: true }).then(() => {
-//  console.log("Drop and re-sync db.");
-//});
+// const db = require("./models");
+// db.sequelize.sync({ alter: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+// });
 
 fs.readdirSync("./routes").map((r) =>
   app.use("/api", require("./routes/" + r))

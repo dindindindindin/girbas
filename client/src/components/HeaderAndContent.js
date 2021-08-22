@@ -22,7 +22,9 @@ import Homepage from "../pages/Homepage";
 import ForgotPassword from "../pages/ForgotPassword";
 import UserSettings from "../pages/user/UserSettings";
 import ChangePassword from "../pages/user/ChangePassword";
-import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminHomepage from "../pages/admin/AdminHomepage";
+import CategoryCreate from "../pages/admin/category/CategoryCreate";
+import CategoryUpdate from "../pages/admin/category/CategoryUpdate";
 import UserRoute from "./UserRoute";
 import AdminRoute from "./AdminRoute";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
@@ -179,7 +181,17 @@ function HeaderAndContent(props) {
             component={ChangePassword}
           />
           <UserRoute exact path="/hesabim" component={UserSettings} />
-          <AdminRoute exact path="/admin" component={AdminDashboard} />
+          <AdminRoute
+            exact
+            path="/admin/kategori-yarat"
+            component={CategoryCreate}
+          />
+          <AdminRoute
+            exact
+            path="/admin/kategori-guncelle"
+            component={CategoryUpdate}
+          />
+          <AdminRoute exact path="/admin" component={AdminHomepage} />
           <Route exact path="/" component={Homepage} />
         </Switch>
       </main>

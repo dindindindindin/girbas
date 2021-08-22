@@ -71,6 +71,11 @@ const RightHeader = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      {user && user.role === "admin" && (
+        <Link component={RouterLink} to="/admin" className={classes.link}>
+          <MenuItem onClick={handleMenuClose}>Admin</MenuItem>
+        </Link>
+      )}
       <Link component={RouterLink} to="/hesabim" className={classes.link}>
         <MenuItem onClick={handleMenuClose}>Hesabım</MenuItem>
       </Link>
