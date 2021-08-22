@@ -21,6 +21,8 @@ import LoginSignup from "../pages/LoginSignup";
 import Homepage from "../pages/Homepage";
 import ForgotPassword from "../pages/ForgotPassword";
 import UserSettings from "../pages/user/UserSettings";
+import ChangePassword from "../pages/user/ChangePassword";
+import UserRoute from "./UserRoute";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -167,10 +169,15 @@ function HeaderAndContent(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
-          <Route exact path="/" component={Homepage} />
           <Route exact path="/uyelik" component={LoginSignup} />
           <Route exact path="/sifremi-unuttum" component={ForgotPassword} />
-          <Route exact path="/hesabim" component={UserSettings} />
+          <UserRoute
+            exact
+            path="/hesabim/sifremi-degistir"
+            component={ChangePassword}
+          />
+          <UserRoute exact path="/hesabim" component={UserSettings} />
+          <Route exact path="/" component={Homepage} />
         </Switch>
       </main>
     </div>

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 const useStyles = makeStyles(() => ({
   link: {
     color: "inherit",
-    "&:hover": { color: "inherit" },
+    "&:hover": { color: "inherit", textDecoration: "none" },
   },
 }));
 
@@ -71,7 +71,9 @@ const RightHeader = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Hesabım</MenuItem>
+      <Link component={RouterLink} to="/hesabim" className={classes.link}>
+        <MenuItem onClick={handleMenuClose}>Hesabım</MenuItem>
+      </Link>
       <MenuItem onClick={handleLogout}>Çıkış yap</MenuItem>
     </Menu>
   );

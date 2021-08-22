@@ -55,8 +55,6 @@ const SignupForm = (props) => {
     setLoading(true);
 
     if (validate()) {
-      console.log(input);
-
       try {
         const result = await auth.createUserWithEmailAndPassword(
           input.email,
@@ -97,7 +95,6 @@ const SignupForm = (props) => {
         } else {
           setErrors({ confirmPassword: error.message });
         }
-        console.log(error);
       }
     }
   };
@@ -112,7 +109,7 @@ const SignupForm = (props) => {
       currentErrors["email"] = "Lütfen e-posta adresinizi giriniz.";
     }
 
-    if (typeof currentInput["email"] !== "undefined") {
+    if (currentInput["email"] !== "") {
       var pattern = new RegExp(
         /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
       );
@@ -133,8 +130,8 @@ const SignupForm = (props) => {
     }
 
     if (
-      typeof currentInput["password"] !== "undefined" &&
-      typeof currentInput["confirmPassword"] !== "undefined"
+      currentInput["password"] !== "" &&
+      currentInput["confirmPassword"] !== ""
     ) {
       if (currentInput["password"] !== currentInput["confirmPassword"]) {
         isValid = false;
@@ -143,7 +140,7 @@ const SignupForm = (props) => {
     }
 
     setErrors(currentErrors);
-
+    setLoading(false);
     return isValid;
   };
 
