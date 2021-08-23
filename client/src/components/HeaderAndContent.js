@@ -25,6 +25,9 @@ import ChangePassword from "../pages/user/ChangePassword";
 import AdminHomepage from "../pages/admin/AdminHomepage";
 import CategoryCreate from "../pages/admin/category/CategoryCreate";
 import CategoryUpdate from "../pages/admin/category/CategoryUpdate";
+import CategoryNameUpdate from "../pages/admin/category/CategoryNameUpdate";
+import SubCategoryCreate from "../pages/admin/subCategory/SubCategoryCreate";
+import SubCategoryUpdate from "../pages/admin/subCategory/SubCategoryUpdate";
 import UserRoute from "./UserRoute";
 import AdminRoute from "./AdminRoute";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
@@ -188,8 +191,23 @@ function HeaderAndContent(props) {
           />
           <AdminRoute
             exact
-            path="/admin/kategori-guncelle"
+            path="/admin/kategoriler"
             component={CategoryUpdate}
+          />
+          <AdminRoute
+            exact
+            path="/admin/kategori/:slug"
+            component={CategoryNameUpdate}
+          />
+          <AdminRoute
+            exact
+            path="/admin/alt-kategori-yarat"
+            component={SubCategoryCreate}
+          />
+          <AdminRoute
+            exact
+            path="/admin/alt-kategori/:slug"
+            component={SubCategoryUpdate}
           />
           <AdminRoute exact path="/admin" component={AdminHomepage} />
           <Route exact path="/" component={Homepage} />

@@ -21,5 +21,6 @@ db.sequelize = sequelize;
 
 db.users = require("./user")(sequelize, Sequelize);
 db.categories = require("./category")(sequelize, Sequelize);
+db.subCategories = require("./subCategory")(sequelize, Sequelize);
 
 module.exports = db;

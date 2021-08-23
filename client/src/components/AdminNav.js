@@ -38,6 +38,14 @@ const AdminNav = () => {
 
           <Link
             component={RouterLink}
+            to="/admin/kategoriler"
+            className={classes.link}
+          >
+            <MenuItem>Kategoriler</MenuItem>
+          </Link>
+
+          <Link
+            component={RouterLink}
             to="/admin/kategori-yarat"
             className={classes.link}
           >
@@ -46,18 +54,10 @@ const AdminNav = () => {
 
           <Link
             component={RouterLink}
-            to="/admin/kategori-guncelle"
+            to="/admin/alt-kategori-yarat"
             className={classes.link}
           >
-            <MenuItem>Kategori Güncelle</MenuItem>
-          </Link>
-
-          <Link
-            component={RouterLink}
-            to="/admin/alt-kategori"
-            className={classes.link}
-          >
-            <MenuItem>Alt Kategori</MenuItem>
+            <MenuItem>Alt Kategori Yarat</MenuItem>
           </Link>
         </MenuList>
       </Paper>
